@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<title>Green API test task</title> 
+		<style>
+		
+			* {
+			  box-sizing: border-box;
+			}
+		
+			.column {
+			  float: left;
+			  width: 50%;
+			  padding: 10px;
+			}
+			
+			.left {
+			  width: 25%;
+			}
+
+			.right {
+			  width: 75%;
+			}
+			
+			.row:after {
+			  content: "";
+			  display: table;
+			  clear: both;
+			}		
+			
+			textarea {
+				width: 100%;
+				height: 80%;
+			}
+			
+			input {
+				width: 100%;
+			}
+			
+		</style>
+	</head>
+	
+	<body>
+		<script>
+			function getSettings() { 
+				idInstance = document.getElementById('idinst').value;
+				apiTokenInstance = document.getElementById('apitoken').value;
+				
+				var xhttp = new XMLHttpRequest();
+				xhttp.open( "GET", "https://7103.api.greenapi.com/waInstance" + idInstance + "/getSettings/" + apiTokenInstance , false );
+				xhttp.send( null );
+				document.getElementById("resp").innerHTML=xhttp.responseText;
+			} 
+		  
+			function getStateInstance() { 
+				idInstance = document.getElementById('idinst').value;
+				apiTokenInstance = document.getElementById('apitoken').value;
+				
+				var xhttp = new XMLHttpRequest();
+				xhttp.open( "GET", "https://7103.api.greenapi.com/waInstance" + idInstance + "/getStateInstance/" + apiTokenInstance , false );
+				xhttp.send( null );
+				document.getElementById("resp").innerHTML=xhttp.responseText;
+			} 
+		  
+			function sendMessage() { 
+				idInstance = document.getElementById('idinst').value;
+				apiTokenInstance = document.getElementById('apitoken').value;
+				const params = {
+					chatId: document.getElementById('telnumt').value + "@c.us",
+					message: document.getElementById('msgtext').value
+				}
+				var xhttp = new XMLHttpRequest();
+				xhttp.open( "POST", "https://7103.api.greenapi.com/waInstance" + idInstance + "/sendMessage/" + apiTokenInstance , false );
+				xhttp.setRequestHeader('Content-type', 'application/json');
+				xhttp.send(JSON.stringify(params));
+				document.getElementById("resp").innerHTML=xhttp.responseText;
+			} 
+		  
+			function sendFile() { 
+				idInstance = document.getElementById('idinst').value;
+				apiTokenInstance = document.getElementById('apitoken').value;
+				var furl = document.getElementById('fileurl').value
+				var fname = furl.substring(furl.lastIndexOf("/") + 1, furl.length);
+				document.getElementById("resp").innerHTML=fname;
+				
+				const params = {
+					chatId: document.getElementById('telnumf').value + "@c.us",
+					urlFile: furl,
+					fileName: fname
+				}
+				
+				var xhttp = new XMLHttpRequest();
+				xhttp.open( "POST", "https://7103.api.greenapi.com/waInstance" + idInstance + "/sendFileByUrl/" + apiTokenInstance , false );
+				xhttp.setRequestHeader('Content-type', 'application/json');
+				xhttp.send(JSON.stringify(params));
+				document.getElementById("resp").innerHTML=xhttp.responseText;
+			} 	  
+		</script>
+	   
+		<div class="row">
+			<div class="column left">
+				<p>Instance:</p>
+				<p><input placeholder="idInstance" id="idinst"></p>
+				<p><input placeholder="ApiToken" id="apitoken"></p>
+				<p><button onclick="getSettings()">getSettings</button></p>
+				<p><button onclick="getStateInstance()">getStateInstance</button></p>
+				<br>
+				<p>Send Message:</p>
+				<p><input placeholder="77771234567" id="telnumt"></p>
+				<p><input placeholder="Hello world!" id="msgtext"></p>
+				<p><button onclick="sendMessage()">sendMessage</button></p>
+				<br>
+				<p>Send File:</p>
+				<p><input placeholder="77771234567" id="telnumf"></p>
+				<p><input placeholder="File url" id="fileurl"></p>
+				<p><button onclick="sendFile()">sendFileByUrl</button></p>
+			</div>
+			<div class="column right">
+				<p>Response:</p><p><textarea id="resp"></textarea></p>
+			</div>
+		</div>
+	   
+	   
+	   
+	</body> 
+</html>
